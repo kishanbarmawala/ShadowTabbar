@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         
         shadowTabbar.delegate = self
         shadowTabbar.numberOfTabs = 5
-        shadowTabbar.preselectTabIdx = 4
+        shadowTabbar.preselectTabIdx = 0
         shadowTabbar.tabbarImages = [UIImage(named: "home"),UIImage(named: "heart"),UIImage(named: "message"),UIImage(named: "notification"),UIImage(named: "search")]
     }
 
