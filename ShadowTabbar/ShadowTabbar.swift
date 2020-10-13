@@ -48,7 +48,6 @@ class ShadowTabbar: UIView {
             }
         }
     }
-//    public var tabbarImages : [UIImage?] = [UIImage(named: "home"),UIImage(named: "heart"),UIImage(named: "message"),UIImage(named: "notification"),UIImage(named: "search")]
     public var tabbarImages : [UIImage?] = [nil,nil,nil,nil,nil]
     
     override func draw(_ rect: CGRect) {
@@ -61,12 +60,8 @@ class ShadowTabbar: UIView {
         self.setupUI()
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setupUI()
-    }
-    
     func setupUI() {
+        self.backgroundColor = .clear
         self.selectionLineView.isUserInteractionEnabled = false
         self.selectionLineView.backgroundColor = .white
         self.selectionLineView.layer.shadowRadius = 4
@@ -74,8 +69,6 @@ class ShadowTabbar: UIView {
         self.selectionLineView.layer.shadowOpacity = 0.8
         self.selectionLineView.layer.shadowColor = UIColor.white.cgColor
         self.selectionLineView.bringSubviewToFront(colTabbar)
-        
-        self.backgroundColor = .clear
         self.colTabbar.bounces = false
         self.colTabbar.register(ShadowTabbarCell.self, forCellWithReuseIdentifier: "ShadowTabbarCell")
         self.colTabbar.addSubview(self.selectionLineView)
@@ -112,7 +105,7 @@ extension ShadowTabbar: UICollectionViewDelegate, UICollectionViewDataSource, UI
         
         if indexPath.item == self.preselectTabIdx {
             cell.btnTabbar.tintColor = .white
-            self.setSelectionView(view: cell/*, width: cell.btnTabbar.selectionView?.frame.width*/)
+            self.setSelectionView(view: cell)
         }
         return cell
     }
