@@ -4,8 +4,8 @@ If you like my work, give it a ★ at the top right of this page.
 You can Give your Reviews and Best Ideas!
 
 ## ShadowTabbar :-
-
-[](https://github.com/kishanbarmawala/ShadowTabbar/tree/master/ShadowTabbar/Preview/Preview.gif) 
+   
+[](https://github.com/kishanbarmawala/ShadowTabbar/blob/master/Preview/Preview.gif) 
 
 ## Requirements
 
