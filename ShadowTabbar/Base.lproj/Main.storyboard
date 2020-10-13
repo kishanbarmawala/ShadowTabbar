@@ -22,16 +22,25 @@
                                     <constraint firstAttribute="height" constant="60" id="E12-6I-JsW"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Selected tab index : 1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ATW-r6-JNb">
+                                <rect key="frame" x="115" y="436" width="184" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="ATW-r6-JNb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2w7-cO-Gkc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WrX-x2-dRK" secondAttribute="trailing" id="9zz-5s-O2f"/>
                             <constraint firstItem="WrX-x2-dRK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AHg-9U-86b"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WrX-x2-dRK" secondAttribute="bottom" id="W5A-Y7-gTf"/>
+                            <constraint firstItem="ATW-r6-JNb" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="lqI-wA-aDU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="label" destination="ATW-r6-JNb" id="THg-Gg-J0X"/>
                         <outlet property="shadowTabbar" destination="WrX-x2-dRK" id="lz1-je-XGp"/>
                     </connections>
                 </viewController>

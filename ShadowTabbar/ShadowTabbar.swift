@@ -8,9 +8,7 @@
 
 import UIKit
 
-protocol ShadowDelegate: class {
-    func shadowTabbar(didSelectAt index: Int)
-}
+protocol ShadowDelegate: class { func shadowTabbar(didSelectAt index: Int) }
 
 class ShadowTabbarCell : UICollectionViewCell {
     let btnTabbar = UIButton()
@@ -18,7 +16,6 @@ class ShadowTabbarCell : UICollectionViewCell {
         super.init(frame: frame)
         self.addViews()
     }
-    
     func addViews() {
         self.btnTabbar.translatesAutoresizingMaskIntoConstraints = false
         self.btnTabbar.imageView?.contentMode = .scaleAspectFit
@@ -31,30 +28,28 @@ class ShadowTabbarCell : UICollectionViewCell {
             self.btnTabbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
 class ShadowTabbar: UIView {
     
-    public weak var delegate : ShadowDelegate?
     private let colTabbar = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let selectionView = UIView()
+    private var tabbarImageInsets : CGFloat = 14
     private var tabPadding : CGFloat = 8
+    private let selectionLineView = UIView()
+    private let padding : CGFloat = 8
     private var lastIdx : Int = 0
-    public var numberOfTab : Int = 5
-    public var preselectTab : Int = 0 {
+    public weak var delegate : ShadowDelegate?
+    public var numberOfTabs : Int = 5
+    public var preselectTabIdx : Int = 0 {
         didSet {
-            if preselectTab > numberOfTab {
-                preselectTab = 0
+            if preselectTabIdx > numberOfTabs {
+                preselectTabIdx = 0
             }
         }
     }
-    public var color : [UIColor] = [.red,.green,.gray,.black,.blue]
-    public var tabbarImages : [UIImage?] = [UIImage(named: "home"),UIImage(named: "heart"),UIImage(named: "message"),UIImage(named: "notification"),UIImage(named: "search")]
-    private var tabbarImageInsets : CGFloat = 14
+//    public var tabbarImages : [UIImage?] = [UIImage(named: "home"),UIImage(named: "heart"),UIImage(named: "message"),UIImage(named: "notification"),UIImage(named: "search")]
+    public var tabbarImages : [UIImage?] = [nil,nil,nil,nil,nil]
     
     override func draw(_ rect: CGRect) {
         self.colTabbar.frame = rect.insetBy(dx: tabPadding, dy: 4)
@@ -72,12 +67,18 @@ class ShadowTabbar: UIView {
     }
     
     func setupUI() {
-        self.selectionView.isUserInteractionEnabled = false
-        self.selectionView.backgroundColor = .white
+        self.selectionLineView.isUserInteractionEnabled = false
+        self.selectionLineView.backgroundColor = .white
+        self.selectionLineView.layer.shadowRadius = 4
+        self.selectionLineView.layer.shadowOffset = .init(width: 0, height: 2)
+        self.selectionLineView.layer.shadowOpacity = 0.8
+        self.selectionLineView.layer.shadowColor = UIColor.white.cgColor
+        self.selectionLineView.bringSubviewToFront(colTabbar)
+        
         self.backgroundColor = .clear
         self.colTabbar.bounces = false
         self.colTabbar.register(ShadowTabbarCell.self, forCellWithReuseIdentifier: "ShadowTabbarCell")
-        self.colTabbar.addSubview(self.selectionView)
+        self.colTabbar.addSubview(self.selectionLineView)
         self.colTabbar.isScrollEnabled = false
         self.colTabbar.dataSource = self
         self.colTabbar.delegate = self
@@ -86,74 +87,30 @@ class ShadowTabbar: UIView {
     }
     
     func setSelectionView(view: UIView, width: CGFloat? = nil) {
-        let padding : CGFloat = 8
         let calWidth = ((width ?? view.frame.width - 2) - (padding * 2)) - 8
-        self.selectionView.frame = CGRect(origin: .init(x: 0, y: 2), size: .init(width: calWidth, height: 6))
-        
-        /*
-        let scale = CGSize(width: 1.1, height: 5)
-        let offsetX: CGFloat = 0
-        
-        let shadowPath = UIBezierPath()
-        shadowPath.move(to:
-            CGPoint(
-                x: 0,
-                y: selectionView.frame.height
-            )
-        )
-        shadowPath.addLine(to:
-            CGPoint(
-                x: calWidth,
-                y: selectionView.frame.height
-            )
-        )
-        shadowPath.addLine(to:
-            CGPoint(
-                x: calWidth * scale.width + offsetX,
-                y: selectionView.frame.height * (1 + scale.height)
-            )
-        )
-        
-        shadowPath.addLine(to:
-            CGPoint(
-                x: calWidth * (1 - scale.width) + offsetX,
-                y: selectionView.frame.height * (1 + scale.height)
-            )
-        )
-        selectionView.layer.shadowPath = shadowPath.cgPath
-        selectionView.layer.shadowRadius = 0
-        selectionView.layer.shadowOffset = .zero
-        selectionView.layer.shadowOpacity = 0.175
-        selectionView.layer.shadowColor = UIColor.white.cgColor
-        */
-        selec
-        selectionView.layer.shadowRadius = 0
-        selectionView.layer.shadowOffset = .zero
-        selectionView.layer.shadowOpacity = 0.175
-        selectionView.layer.shadowColor = UIColor.white.cgColor
-        selectionView.bringSubviewToFront(colTabbar)
-        self.selectionView.center.x = view.center.x
-        self.selectionView.superview?.layoutIfNeeded()
+        self.selectionLineView.frame = CGRect(origin: .init(x: 0, y: 2), size: .init(width: calWidth, height: 4))
+        self.selectionLineView.center.x = view.center.x
+        self.selectionLineView.superview?.layoutIfNeeded()
     }
 }
 
 extension ShadowTabbar: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.numberOfTab
+        return self.numberOfTabs
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShadowTabbarCell", for: indexPath) as! ShadowTabbarCell
         cell.btnTabbar.imageEdgeInsets = UIEdgeInsets(top: tabbarImageInsets, left: tabbarImageInsets, bottom: tabbarImageInsets, right: tabbarImageInsets)
-        cell.btnTabbar.backgroundColor = .clear//color[indexPath.item]
+        cell.btnTabbar.backgroundColor = .clear
         
         let img = tabbarImages[indexPath.item]
         let templateImage = img?.withRenderingMode(.alwaysTemplate)
         cell.btnTabbar.tintColor = .gray
         cell.btnTabbar.setImage(templateImage, for: .normal)
         
-        if indexPath.item == self.preselectTab {
+        if indexPath.item == self.preselectTabIdx {
             cell.btnTabbar.tintColor = .white
             self.setSelectionView(view: cell/*, width: cell.btnTabbar.selectionView?.frame.width*/)
         }
@@ -162,12 +119,12 @@ extension ShadowTabbar: UICollectionViewDelegate, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.delegate?.shadowTabbar(didSelectAt: indexPath.item)
-        self.lastIdx = self.preselectTab
-        self.preselectTab = indexPath.item
+        self.lastIdx = self.preselectTabIdx
+        self.preselectTabIdx = indexPath.item
         let previusIndex = IndexPath(item: lastIdx, section: 0)
         let currentIndex = indexPath
         guard let currentCell = self.colTabbar.cellForItem(at: currentIndex) as? ShadowTabbarCell else { return }
-        if self.preselectTab == indexPath.item {
+        if self.preselectTabIdx == indexPath.item {
             UIView.animate(withDuration: 0.3, animations: {
                 self.setSelectionView(view: currentCell)
             })
@@ -186,6 +143,6 @@ extension ShadowTabbar: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.colTabbar.bounds.width / CGFloat(self.numberOfTab) , height: colTabbar.bounds.height)
+        return CGSize(width: self.colTabbar.bounds.width / CGFloat(self.numberOfTabs) , height: colTabbar.bounds.height)
     }
 }
